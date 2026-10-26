@@ -5,8 +5,10 @@ from mision import Mision
 class Personaje(ABC):
     def __init__(self, nombre: str):
         self.nombre = nombre
-
-
+class Ayudante(personaje, ABC):
+    def __init__(self, nombre: str, costoPista: int):
+        super().__init__(nombre)
+        self._costo = costoPista: #ejemplo: 10 
 class Heroe(Personaje):
     def __init__(self, nombre: str, saldo: int = 100, intentos_restantes: int = 3):
         super().__init__(nombre)
