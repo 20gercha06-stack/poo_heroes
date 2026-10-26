@@ -4,6 +4,26 @@ Bienvenido al repositorio del caso de estudio de la Unidad II. Este código base
 
 ## Reglas de Negocio (Diseño V3)
 
+## 1. Ciclo de Vida de los Intentos y Estado de la Misión
+
+- **Registro de Errores:** Cada intento fallido suma $1$ al contador de errores de la misión activa.
+- **Límite y Bloqueo:** Al alcanzar el límite establecido (3 errores), la misión cambia su estado a `bloqueada`.
+- **Rechazo de Intentos:** Todo cuarto intento posterior sobre una misión bloqueada debe ser rechazado de forma inmediata sin procesarse.
+- **Recompensas Únicas:** La recompensa correspondiente se calcula y acredita **una sola vez** al completar exitosamente la misión.
+
+---
+
+## 2. Dificultades Dinámicas
+
+- **Condición de Activación:** Las clases que implementan la interfaz `Dificultad` (por ejemplo, el bloqueo de rutas o sabotajes) solo pueden aplicarse si la misión se encuentra en estado `activa`.
+- **Validación de Solución:** Ninguna dificultad puede aplicarse si su modificación deja el reto sin una solución matemática o lógica posible.
+- **Estado Persistente y Restablecimiento:**
+    - Al reiniciar una partida, se restauran las condiciones iniciales del reto.
+    - Se conservan las compras de pistas realizadas y los premios registrados previamente.
+    - La relectura de una pista previamente adquirida no genera ningún costo adicional.
+
+---
+
 ## 3. Gestión de Partida y Misiones
 
 - **Contenedor Principal (`Partida`):** Actúa como el orquestador central del juego. Administra una colección de objetos `Mision` mediante una relación de composición (una misión no existe de forma independiente fuera de la partida).
