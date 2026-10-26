@@ -4,45 +4,42 @@ Bienvenido al repositorio del caso de estudio de la Unidad II. Este código base
 
 ## Reglas de Negocio (Diseño V3)
 
-1. Ciclo de Intentos: Un error suma 1 al contador de la misión.
-2. Al llegar al límite (3 errores), la misión se bloquea.
-3. Un cuarto intento debe ser rechazado sin procesarse.
-
-- Recompensas: La recompensa se acredita solo una vez al completar la misión.
-- Dificultades Dinámicas: Las clases que implementen la interfaz Dificultad (ej. bloquear rutas) solo se aplican si la misión está activa. Una dificultad no puede aplicarse si deja el reto sin solución posible.
-- Estado Persistente: Al reiniciar una partida, se restauran las condiciones iniciales del reto, pero se conservan las compras de pistas y premios registrados. Leer una pista ya comprada es gratis.
-
-1. Gestión de Partida y Misiones
-Contenedor Principal: La clase Partida actúa como el orquestador principal del juego. Administra una colección de objetos Mision mediante una relación de composición (una misión no existe de forma independiente fuera de una partida).
-Composición de Misiones: Cada objeto Mision encapsula exactamente un Reto y puede contener cero o más objetos Pista.
-Independencia de Configuración: Una partida se puede configurar dinámicamente agregando misiones que contengan retos de diferente tipo y con distintos niveles de dificultad.
-
-2. Jerarquía Polimórfica de Retos Matemáticos
-Clase Abstracta Base (Reto): Define el contrato común para todos los problemas matemáticos del juego (evaluarRespuesta, generarProblema, aumentarDificultad).
-
-Tipos Concretos de Habilidades:
-RetoSecuencia: Representa ejercicios de patrones y series numéricas.
-RetoOrdenamiento: Representa ejercicios de ordenamiento de listas de elementos.
-RetoRutaCorta: Representa ejercicios de optimización de caminos sobre grafos.
-
-Escala de Dificultad: La dificultad de cada reto está fuertemente tipada a través del enumerado NivelDificultad (FACIL, MEDIO, DIFICIL).
-
-3. Especialización y Roles de los Villanos
-Especialización por Tipo de Reto: La clase abstracta Villano obliga a sus subclases a implementar el método complicarReto(r: Reto).
-
+Especificaciones de Diseño y Reglas de Negocio - Versión 3
+Este documento recopila las reglas de negocio, los lineamientos de arquitectura orientada a objetos y las pautas de diseño para el motor del videojuego.
+1. Ciclo de Vida de los Intentos y Estado de la Misión
+Registro de Errores: Cada intento fallido suma 
+1
+1 al contador de errores de la misión activa.
+Límite y Bloqueo: Al alcanzar el límite establecido (3 errores), la misión cambia su estado a bloqueada.
+Rechazo de Intentos: Todo cuarto intento posterior sobre una misión bloqueada debe ser rechazado de forma inmediata sin procesarse.
+Recompensas Únicas: La recompensa correspondiente se calcula y acredita una sola vez al completar exitosamente la misión.
+2. Dificultades Dinámicas
+Condición de Activación: Las clases que implementan la interfaz Dificultad (por ejemplo, el bloqueo de rutas o sabotajes) solo pueden aplicarse si la misión se encuentra en estado activa.
+Validación de Solución: Ninguna dificultad puede aplicarse si su modificación deja el reto sin una solución matemática o lógica posible.
+Estado Persistente y Restablecimiento:
+Al reiniciar una partida, se restauran las condiciones iniciales del reto.
+Se conservan las compras de pistas realizadas y los premios registrados previamente.
+La relectura de una pista previamente adquirida no genera ningún costo adicional.
+3. Gestión de Partida y Misiones
+Contenedor Principal (Partida): Actúa como el orquestador central del juego. Administra una colección de objetos Mision mediante una relación de composición (una misión no existe de forma independiente fuera de la partida).
+Composición Interna: Cada objeto Mision encapsula exactamente un Reto y puede contener cero o más objetos Pista.
+Configuración Dinámica: Una partida puede configurarse agregando misiones de forma flexible que contengan retos de distinta naturaleza y con diversos niveles de dificultad.
+4. Jerarquía Polimórfica de Retos Matemáticos
+Clase Abstracta Base (Reto): Define el contrato común para todos los problemas del juego mediante métodos como evaluarRespuesta(), generarProblema() y aumentarDificultad().
+Tipos Concretos de Retos:
+RetoSecuencia: Representa ejercicios basados en patrones y series numéricas.
+RetoOrdenamiento: Modela ejercicios de ordenamiento de listas de elementos.
+RetoRutaCorta: Gestiona ejercicios de optimización de caminos sobre grafos.
+Escala de Dificultad: La complejidad de cada reto está tipada mediante el enumerado NivelDificultad (FACIL, MEDIO, DIFICIL).
+5. Especialización y Roles de los Villanos
+Contrato de Villano: La clase abstracta Villano obliga a sus subclases a implementar el método complicarReto(r: Reto).
 Modificación Dirigida:
-
 Joker: Evalúa y eleva la complejidad exclusivamente cuando el reto es de tipo RetoSecuencia.
 GreenGoblin: Modifica y aumenta la dificultad únicamente en retos de tipo RetoRutaCorta.
-
-Creación de Misiones: Los villanos pueden actuar como creadores/generadores de misiones mediante el método plantearMision(r: Reto).
-
-4. Interacción de Héroes y Ayudantes
-Resolución de Misiones: El Heroe (ej. Batman) interactúa con la Partida para resolver misiones, consumiendo intentos y gestionando un saldo para comprar pistas.
-
-Sistema de Pistas: El héroe puede solicitar ayuda a un Ayudante (ej. Alfred), quien le provee objetos Pista a cambio de un costo definido.
-
-
+Generación de Desafíos: Los villanos actúan como creadores de misiones mediante el método plantearMision(r: Reto).
+6. Interacción de Héroes y Ayudantes
+Resolución de Misiones: El Heroe (por ejemplo, Batman) interactúa con el sistema para resolver misiones, consumiendo intentos y administrando un saldo de créditos.
+Sistema de Pistas: El héroe puede solicitar asistencia a un Ayudante (por ejemplo, Alfred), quien le provee objetos Pista a cambio de un costo predefinido en el catálogo.
 
 ## Instrucciones para Estudiantes (GitHub Flow)
 - Revisa el tablero de Issues y asígnate una tarea (máximo 2 personas Peer-Programming por tarea para evitar colisiones).
